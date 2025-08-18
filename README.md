@@ -1,4 +1,4 @@
-# Kahoot Winning Bot
+# Kahoot Bot
 
 Um bot em Python que joga Kahoot automaticamente usando Visão Computacional para ler a tela e a API do Google Gemini para encontrar as respostas corretas.
 

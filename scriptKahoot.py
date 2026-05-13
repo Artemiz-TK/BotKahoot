@@ -81,13 +81,13 @@ def extrair_texto_da_area(imagem, area, nome_area):
     roi = imagem[y:y+h, x:x+w]
     
     if nome_area == 'pergunta':
-        cinza = cv.cvtColor(roi, cv.COLOR_BGR2GRAY)
-        _, processada = cv.threshold(cinza, 127, 255, cv.THRESH_BINARY)
+        cinza = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+        _, processada = cv2.threshold(cinza, 127, 255, cv2.THRESH_BINARY)
     else:
-        hsv = cv.cvtColor(roi, cv.COLOR_BGR2HSV)
+        hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
         cor_min, cor_max = HSV_RANGES[nome_area]
-        mascara_fundo = cv.inRange(hsv, cor_min, cor_max)
-        processada = cv.bitwise_not(mascara_fundo)
+        mascara_fundo = cv2.inRange(hsv, cor_min, cor_max)
+        processada = cv2.bitwise_not(mascara_fundo)
         
     try:
         texto = pytesseract.image_to_string(processada, lang='por', config='--psm 6')
@@ -161,11 +161,11 @@ print("🚀 Bot iniciado. Pressione Ctrl+C no terminal para parar.")
 try:
     with mss.mss() as sct:
         while True:
-            monitor_alvo = sct.monitors[MONITOR_ALVO_NUM]
+            monitor_alvo = sct.monitors[MONITOR_ALVO_NUM-1]
             screenshot = sct.grab(monitor_alvo)
             
             img_np = np.array(screenshot)
-            img_bgr = cv.cvtColor(img_np, cv.COLOR_BGRA2BGR)
+            img_bgr = cv2.cvtColor(img_np, cv2.COLOR_BGRA2BGR)
 
             resultados = {}
             for nome_area, coords in AREAS_DE_INTERESSE.items():
@@ -187,7 +187,7 @@ try:
                     # Prepara e envia a imagem para a IA
                     x, y, w, h = AREAS_DE_INTERESSE["imagem_pergunta"]
                     imagem_pergunta_np = img_bgr[y:y+h, x:x+w]
-                    imagem_rgb = cv.cvtColor(imagem_pergunta_np, cv.COLOR_BGR2RGB)
+                    imagem_rgb = cv2.cv2tColor(imagem_pergunta_np, cv2.COLOR_BGR2RGB)
                     imagem_pil = Image.fromarray(imagem_rgb)
 
                     resposta_ia = obter_resposta_da_ia(pergunta_atual, list(opcoes.values()), imagem=imagem_pil)
@@ -224,4 +224,4 @@ try:
 except KeyboardInterrupt:
     print("\n[INFO] Bot interrompido pelo usuário (Ctrl+C). Encerrando.")
 finally:
-    cv.destroyAllWindows()
+    cv2.destroyAllWindows()
